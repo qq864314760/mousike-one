@@ -1,0 +1,102 @@
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+
+@Injectable()
+export class ${table.controllerName} extends RebirthHttp {
+
+    constructor(http: HttpClient) {
+        super(http);
+    }
+
+    /**
+     * @description : 获取分页列表
+     * @author : ${author}
+     * @since : Create in ${date}
+     * @Return : 如果未找到数据返回Body为Page对象，状态码为200（success）
+     * 请注意入参对象为Mybatis plus（com.baomidou.mybatisplus.plugins.Page）提供的分页对象，而非Spring自身的分页对象。
+     * 分页请求URL例如：http://localhost:8081/api/param-dicts?current=1&size=2&descs=字段名1,字段名2&ascs=字段名3,字段名4
+     *      current：当前页（从1开始）
+     *      size：每页显示返回条数
+     *      descs：倒序排序的列
+     *      ascs：正序排序的列
+     */
+    @GET(SERVER_API_URL + "/get${entity}List")
+    get${entity}List(
+        @Body ${entity} ${table.entityPath}: ${entity},
+        @Query('current') current: number,
+        @Query('size') size: number,
+        @Query('ascs') ascs: string,
+        @Query('descs') descs: string
+    ): Observable<HttpResult<Page<${entity}>>> {
+        return null; // leave `return null` due to TypeScript Interface isn't visable in runtime
+    }
+
+    /**
+     * @description : 通过id获取${entity}
+     * @author : ${author}
+     * @since : Create in ${date}
+     * @return : 如果查询到数据返回数据对象，如果未找到对应数据 则Body值为空。
+     */
+    @GET(SERVER_API_URL + "/get${entity}")
+    get${entity}(
+        @Query('id') id: string
+    ): Observable<HttpResult<${entity}>> {
+        return null; // leave `return null` due to TypeScript Interface isn't visable in runtime
+    }
+
+    /**
+     * @description : 通过id删除${entity}
+     * @author : ${author}
+     * @since : Create in ${date}
+     * 根据RFC2612 DELETE 定义：
+     *     如果响应里包含描述成功的实体，响应应该是200（Ok）；如果DELETE动作没有通过，应该以202（已接受Accepted）响应；
+     *     如果DELETE方法请求已经通过了，但响应不包含实体，那么应该以204（无内容）响应。
+     * @return : DELETE返回204（no context）
+     *
+     */
+    @Timed
+    @DELETE(SERVER_API_URL + "/delete${entity}ById")
+    delete${entity}ById(
+        @Query('id') id: string
+    ): Observable<HttpResult<${entity}>> {
+        return null; // leave `return null` due to TypeScript Interface isn't visable in runtime
+    }
+
+    /**
+     * @description : 更新${entity}
+     * @author : ${author}
+     * @since : Create in ${date}
+     * 根据RFC2612 PUT 定义：
+     *     如果已存在的资源被改变了，那么源服务器应该发送200（Ok）或者204（无内容）响应。
+     *     如果资源不能根据请求URI创建或者改变，一个合适的错误响应应该给出以反应问题的性质。
+     *     实体的接收者不能忽略任何它不理解的Content-*（如：Content-Range）头域，
+     *     并且必须返回501（没有被实现）响应。
+     * @return : 如果PUT操作更新成功返回200（ok），并且Body中返回已修改的Entity对象,乐观锁冲突返回400（bad request）
+     */
+    @Timed
+    @PUT(SERVER_API_URL + "/update${entity}ById")
+    update${entity}ById(
+        @Body ${entity} ${table.entityPath}: ${entity}
+    ): Observable<HttpResult<${entity}>> {
+        return null; // leave `return null` due to TypeScript Interface isn't visable in runtime
+    }
+    /**
+     * @description : 添加${entity}
+     * @author : ${author}
+     * @since : Create in ${date}
+     * @return :如果POST操作更新成功返回201（Created），并且Body中返回已创建的Entity对象
+     */
+    @Timed
+    @POST("/${resource}s")
+    create${entity}(
+        @Body ${entity} ${table.entityPath}: ${entity}
+    ): Observable<HttpResult<${entity}>> {
+        return null; // leave `return null` due to TypeScript Interface isn't visable in runtime
+    }
+}

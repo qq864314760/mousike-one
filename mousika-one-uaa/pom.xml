@@ -7,26 +7,30 @@
         <artifactId>mousika-one</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.developer.mousika-one</groupId>
+
+    <groupId>com.developer.mousika</groupId>
     <artifactId>mousika-one-uaa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>mousika-one-uaa</name>
-    <description>Demo project for Spring Boot</description>
+
+    <description>UAA</description>
 
     <properties>
         <java.version>1.8</java.version>
+        <mousika-one-core.version>1.0-SNAPSHOT</mousika-one-core.version>
+        <metrics.version>3.2.5</metrics.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.developer.mousika</groupId>
+            <artifactId>mousika-one-core</artifactId>
+            <version>${mousika-one-core.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-annotation</artifactId>
+            <version>${metrics.version}</version>
         </dependency>
     </dependencies>
 

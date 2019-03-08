@@ -1,0 +1,73 @@
+package ${package.Entity};
+
+#foreach($pkg in ${table.importPackages})
+import ${pkg};
+#end
+#if(${entityLombokModel})
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import lombok.ToString;
+#end
+
+/**
+ * <p>
+ * $!{table.comment}
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${entityLombokModel})
+@Data
+@Accessors(chain = true)
+@ToString(callSuper = true)
+#if(${superEntityClass})
+@EqualsAndHashCode(callSuper = true)
+#end
+#end
+#if(${table.convert})
+@TableName("${table.name}")
+#end
+#if(${superEntityClass})
+public class ${entity} extends ${superEntityClass}<${entity}>{
+#elseif(${activeRecord})
+public class ${entity} extends Model<${entity}> {
+#else
+public class ${entity} implements Serializable {
+#end
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+#if(${field.keyFlag})
+#set($keyPropertyName=${field.propertyName})
+#end
+#if("$!field.comment" != "")
+#if(${field.name} !='created_by'
+&&${field.name} !='created_date'
+&&${field.name} !='last_modified_by'
+&&${field.name} !='last_modified_date'
+&&${field.name} !='version_lock')
+    //${field.comment}
+#end
+#end
+#if(${field.keyFlag})
+## 主键
+#if(${field.keyIdentityFlag})
+    @TableId(value = "${field.name}", type = IdType.AUTO)
+#elseif(!$null.isNull(${idType}) && "$!idType" != "")
+    @TableId(value = "${field.name}", type = IdType.${idType})
+#elseif(${field.convert})
+    @TableId("${field.name}")
+#end
+## 普通字段
+#end
+#if(${field.name} !='created_by'
+&&${field.name} !='created_date'
+&&${field.name} !='last_modified_by'
+&&${field.name} !='last_modified_date'
+&&${field.name} !='version_lock')
+    private ${field.propertyType} ${field.propertyName};
+#end
+#end
+## ----------  END 字段循环遍历  ----------
+}

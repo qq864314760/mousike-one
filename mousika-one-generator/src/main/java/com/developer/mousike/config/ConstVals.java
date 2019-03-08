@@ -28,4 +28,7 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
 public interface ConstVals extends ConstVal {
     String TEMPLATE_DTO_JAVA = "/templates/dto.java";
     String TEMPLATE_MAP_STRUCT_JAVA = "/templates/mapStruct.java";
+
+    String TEMPLATE_ANGLUAR_ENTITY_TS = "/templates/entity.ts";
+    String TEMPLATE_ANGLUAR_HTTP_SERVICE_TS = "/templates/httpService.ts";
 }

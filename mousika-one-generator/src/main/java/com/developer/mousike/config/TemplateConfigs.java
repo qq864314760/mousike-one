@@ -31,6 +31,9 @@ public class TemplateConfigs extends TemplateConfig {
 
     private String mapStruct = ConstVals.TEMPLATE_MAP_STRUCT_JAVA;
 
+    private String angluarEntityTs = ConstVals.TEMPLATE_ANGLUAR_ENTITY_TS;
+    private String angluarHttpServiceTs = ConstVals.TEMPLATE_ANGLUAR_HTTP_SERVICE_TS;
+
     public String getDto() {
         return dto;
     }
@@ -46,6 +49,24 @@ public class TemplateConfigs extends TemplateConfig {
 
     public TemplateConfigs setMapStruct(String mapStruct) {
         this.mapStruct = mapStruct;
+        return this;
+    }
+
+    public String getAngluarEntityTs() {
+        return angluarEntityTs;
+    }
+
+    public TemplateConfigs setAngluarEntityTs(String angluarEntityTs) {
+        this.angluarEntityTs = angluarEntityTs;
+        return this;
+    }
+
+    public String getAngluarHttpServiceTs() {
+        return angluarHttpServiceTs;
+    }
+
+    public TemplateConfigs setAngluarHttpServiceTs(String angluarHttpServiceTs) {
+        this.angluarHttpServiceTs = angluarHttpServiceTs;
         return this;
     }
 }

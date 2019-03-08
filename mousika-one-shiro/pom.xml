@@ -7,11 +7,13 @@
         <artifactId>mousika-one</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <groupId>com.developer.mousika</groupId>
     <artifactId>mousika-one-shiro</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>mousika-one-shiro</name>
-    <description>Demo project for Spring Boot</description>
+
+    <description>shiro</description>
 
     <properties>
         <java.version>1.8</java.version>

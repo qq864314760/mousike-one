@@ -20,14 +20,24 @@ import java.util.List;
  */
 public class MyGenerator {
 
-    public static String PACKAGE_PATH = "com.sinfusi.democracy";
-    public static String BASE_PATH = PACKAGE_PATH + ".service.lambda.common.";
-    public static String PARENT_PATH = PACKAGE_PATH + ".service.lambda";
+    public static String PACKAGE_PATH = "com.developer.mousika";
+    public static String BASE_PATH = PACKAGE_PATH + ".service.common.";
+    public static String PARENT_PATH = PACKAGE_PATH + ".service";
 
-    private static String driverName = "com.mysql.jdbc.Driver";
+//    private static String driverName = "com.mysql.cj.jdbc.Driver";
+//    private static String username = "fls_dev";
+//    private static String password = "Fls_dev@123";
+//    private static String serviceUrl = "10.102.100.132";
+//    private static String servicePort = "3306";
+//    private static String dbName = "fls_dev";
+
+    private static String driverName = "com.mysql.cj.jdbc.Driver";
     private static String username = "root";
     private static String password = "1234";
-    private static String serviceUrl = "10.102.230.7";
+    private static String serviceUrl = "127.0.0.1";
+    private static String servicePort = "3306";
+    private static String dbName = "mousika";
+
 //    private static String driverName = "org.postgresql.Driver";
 //    private static String username = "dws_service";
 //    private static String password = "inf$#%29KID";
@@ -79,8 +89,8 @@ public class MyGenerator {
                 // 数据源配置
                 new DataSourceConfig()
                         // 数据库类型
-//                        .setDbType(DbType.MYSQL)
-                        .setDbType(DbType.POSTGRE_SQL)
+                        .setDbType(DbType.MYSQL)
+//                        .setDbType(DbType.POSTGRE_SQL)
                         /*.setTypeConvert(new MySqlTypeConvert() {
                             // 自定义数据库表字段类型转换【可选】
                             @Override
@@ -95,8 +105,7 @@ public class MyGenerator {
                         .setDriverName(driverName)
                         .setUsername(username)
                         .setPassword(password)
-//                        .setUrl("jdbc:mysql://" + serviceUrl + ":3306/fls_dev?characterEncoding=utf8")
-                        .setUrl("jdbc:postgresql://" + serviceUrl + ":10000/DWS")
+                        .setUrl("jdbc:mysql://" + serviceUrl + ":" + servicePort + "/" + dbName + "?characterEncoding=utf8")
         ).setStrategy(
                 // 策略配置
                 new StrategyConfigs()
@@ -173,6 +182,8 @@ public class MyGenerator {
                 new TemplateConfigs()
                         .setDto("/templates/dto.java.vm")
                         .setMapStruct("/templates/mapStruct.java.vm")
+                        .setAngluarEntityTs("/templates/entity.ts.vm")
+                        .setAngluarHttpServiceTs("/templates/httpService.ts.vm")
                         .setController("/templates/resource.java.vm")
                         .setEntity("/templates/entity.java.vm")
                         .setMapper("/templates/mapper.java.vm")

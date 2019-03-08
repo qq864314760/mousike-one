@@ -13,6 +13,7 @@
         <module>mousika-one-uaa</module>
         <module>mousika-one-generator</module>
         <module>mousika-one-shiro</module>
+        <module>mousika-one-core</module>
     </modules>
 
     <properties>
@@ -23,12 +24,18 @@
         <java.version>1.8</java.version>
         <lombok.version>1.18.6</lombok.version>
         <spring-boot.version>2.1.3.RELEASE</spring-boot.version>
+        <spring-web.version>4.3.14.RELEASE</spring-web.version>
         <mybatisplus-spring-boot-starter.version>1.0.5</mybatisplus-spring-boot-starter.version>
         <mybatisplus.version>3.1.0</mybatisplus.version>
         <fastjson.version>1.2.56</fastjson.version>
         <druid.version>1.1.14</druid.version>
         <shiro.version>1.4.0</shiro.version>
         <shiro-redis.version>2.4.2.1-RELEASE</shiro-redis.version>
+        <junit-jupiter.version>RELEASE</junit-jupiter.version>
+        <junit.version>4.12</junit.version>
+        <spring-boot-test.version>1.5.10.RELEASE</spring-boot-test.version>
+        <spring-boot-starter-test.version>2.1.3.RELEASE</spring-boot-starter-test.version>
+        <spring-test.version>4.3.14.RELEASE</spring-test.version>
     </properties>
 
     <dependencies>
@@ -45,6 +52,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-web.version}</version>
+            <scope>compile</scope>
         </dependency>
         <!--在外部tomcat中发布故移除内置包-->
         <dependency>
@@ -96,7 +109,6 @@
             <version>${druid.version}</version>
         </dependency>
         <!-- JDBC链接池 -->
-
         <!-- shiro 权限配置 -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -104,7 +116,37 @@
             <version>${shiro.version}</version>
         </dependency>
         <!-- shiro 权限配置 -->
-
+        <!-- 单元测试 test 权限配置 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot-starter-test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <version>${spring-boot-test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- 单元测试 test 权限配置 -->
     </dependencies>
-
 </project>
