@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.developer.mousike.config;
+package com.developer.mousika.config;
 
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 
