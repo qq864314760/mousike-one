@@ -1,8 +1,5 @@
 package com.developer.mousika.config;
 
-import java.io.File;
-import java.net.URI;
-
 /**
  * Application constants.
  */
