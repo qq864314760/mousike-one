@@ -1,4 +1,4 @@
-package com.developer.mousika.config;
+package com.developer.mousika.generator.config;
 
 import java.net.URI;
 

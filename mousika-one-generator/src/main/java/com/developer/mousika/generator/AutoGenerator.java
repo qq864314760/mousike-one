@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2020, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -20,11 +20,16 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.developer.mousika.config.*;
-import com.developer.mousika.config.builder.ConfigBuilder;
-import com.developer.mousika.config.po.TableInfo;
-import com.developer.mousika.engine.AbstractTemplateEngine;
-import com.developer.mousika.engine.VelocityTemplateEngine;
+import com.developer.mousika.generator.config.*;
+import com.developer.mousika.generator.config.builder.ConfigBuilder;
+import com.developer.mousika.generator.config.po.TableInfo;
+import com.developer.mousika.generator.engine.AbstractTemplateEngine;
+import com.developer.mousika.generator.engine.VelocityTemplateEngine;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +42,11 @@ import java.util.List;
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
  */
+@Data
+@Accessors(chain = true)
 public class AutoGenerator {
-
     private static final Logger logger = LoggerFactory.getLogger(AutoGenerator.class);
+
     /**
      * 配置信息
      */
@@ -47,6 +54,8 @@ public class AutoGenerator {
     /**
      * 注入配置
      */
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     protected InjectionConfig injectionConfig;
     /**
      * 数据源配置
@@ -95,34 +104,30 @@ public class AutoGenerator {
     }
 
     /**
-     * <p>
      * 开放表信息、预留子类重写
-     * </p>
      *
      * @param config 配置信息
-     * @return
+     * @return ignore
      */
     protected List<TableInfo> getAllTableInfoList(ConfigBuilder config) {
         return config.getTableInfoList();
     }
 
     /**
-     * <p>
      * 预处理配置
-     * </p>
      *
      * @param config 总配置信息
      * @return 解析数据结果集
      */
     protected ConfigBuilder pretreatmentConfigBuilder(ConfigBuilder config) {
-        /**
+        /*
          * 注入自定义配置
          */
         if (null != injectionConfig) {
             injectionConfig.initMap();
             config.setInjectionConfig(injectionConfig);
         }
-        /**
+        /*
          * 表信息列表
          */
         List<TableInfo> tableList = this.getAllTableInfoList(config);
@@ -144,77 +149,29 @@ public class AutoGenerator {
                 // 乐观锁注解
                 tableInfo.setImportPackages(Version.class.getCanonicalName());
             }
+            boolean importSerializable = true;
             if (StringUtils.isNotEmpty(config.getSuperEntityClass())) {
                 // 父实体
                 tableInfo.setImportPackages(config.getSuperEntityClass());
-            } else {
+                importSerializable = false;
+            }
+            if (config.getGlobalConfig().isActiveRecord()) {
+                importSerializable = true;
+            }
+            if (importSerializable) {
                 tableInfo.setImportPackages(Serializable.class.getCanonicalName());
             }
             // Boolean类型is前缀处理
             if (config.getStrategyConfig().isEntityBooleanColumnRemoveIsPrefix()) {
                 tableInfo.getFields().stream().filter(field -> "boolean".equalsIgnoreCase(field.getPropertyType()))
                     .filter(field -> field.getPropertyName().startsWith("is"))
-                    .forEach(field -> field.setPropertyName(config.getStrategyConfig(),
-                        StringUtils.removePrefixAfterPrefixToLower(field.getPropertyName(), 2)));
+                    .forEach(field -> {
+                        field.setConvert(true);
+                        field.setPropertyName(StringUtils.removePrefixAfterPrefixToLower(field.getPropertyName(), 2));
+                    });
             }
         }
         return config.setTableInfoList(tableList);
-    }
-
-    // ==================================  相关配置  ==================================
-
-    public DataSourceConfig getDataSource() {
-        return dataSource;
-    }
-
-    public AutoGenerator setDataSource(DataSourceConfig dataSource) {
-        this.dataSource = dataSource;
-        return this;
-    }
-
-    public StrategyConfig getStrategy() {
-        return strategy;
-    }
-
-    public AutoGenerator setStrategy(StrategyConfig strategy) {
-        this.strategy = strategy;
-        return this;
-    }
-
-    public PackageConfig getPackageInfo() {
-        return packageInfo;
-    }
-
-    public AutoGenerator setPackageInfo(PackageConfig packageInfo) {
-        this.packageInfo = packageInfo;
-        return this;
-    }
-
-    public TemplateConfig getTemplate() {
-        return template;
-    }
-
-    public AutoGenerator setTemplate(TemplateConfig template) {
-        this.template = template;
-        return this;
-    }
-
-    public ConfigBuilder getConfig() {
-        return config;
-    }
-
-    public AutoGenerator setConfig(ConfigBuilder config) {
-        this.config = config;
-        return this;
-    }
-
-    public GlobalConfig getGlobalConfig() {
-        return globalConfig;
-    }
-
-    public AutoGenerator setGlobalConfig(GlobalConfig globalConfig) {
-        this.globalConfig = globalConfig;
-        return this;
     }
 
     public InjectionConfig getCfg() {
@@ -223,15 +180,6 @@ public class AutoGenerator {
 
     public AutoGenerator setCfg(InjectionConfig injectionConfig) {
         this.injectionConfig = injectionConfig;
-        return this;
-    }
-
-    public AbstractTemplateEngine getTemplateEngine() {
-        return templateEngine;
-    }
-
-    public AutoGenerator setTemplateEngine(AbstractTemplateEngine templateEngine) {
-        this.templateEngine = templateEngine;
         return this;
     }
 }

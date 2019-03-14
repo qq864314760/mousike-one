@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.developer.mousika.config.BaseConstants;
+import com.developer.mousika.generator.config.BaseConstants;
 import com.developer.mousika.exception.BadRequestAlertException;
 import com.developer.mousika.service.BaseService;
 import org.slf4j.Logger;
