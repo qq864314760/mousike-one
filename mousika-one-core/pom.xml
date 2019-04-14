@@ -16,6 +16,7 @@
         <mybatis-plus-boot-starter.version>3.1.0</mybatis-plus-boot-starter.version>
         <problem.version>0.20.1</problem.version>
         <security.version>4.2.4.RELEASE</security.version>
+        <spring-cloud.version>2.1.1.RELEASE</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -29,6 +30,11 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <version>${security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+            <version>${spring-cloud.version}</version>
         </dependency>
     </dependencies>
 

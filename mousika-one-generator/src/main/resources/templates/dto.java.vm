@@ -1,23 +1,19 @@
 package ${package.Dto};
 
 #foreach($pkg in ${table.importPackages})
-#if($pkg.indexOf("TableName")==-1 && $pkg.indexOf("TableField")==-1 && $pkg.indexOf("BaseEntity")==-1)
+#if($pkg.indexOf("BaseDTO") > -1)
 import ${pkg};
 #end
 #end
 #if(${entityLombokModel})
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.ToString;
 #end
-import com.sinfusi.democracy.common.dto.BaseDTO;
 
 /**
- * <p>
  * $!{table.comment}
- * </p>
  *
  * @author ${author}
  * @since ${date}

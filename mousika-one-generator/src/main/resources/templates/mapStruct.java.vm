@@ -1,27 +1,32 @@
 package ${package.MapStruct};
 
-import com.sinfusi.democracy.common.mapstruct.BaseMapStruct;
+#foreach($pkg in ${table.importPackages})
+#if($pkg.indexOf("BaseMapStruct") > -1)
+import ${pkg};
+#end
+#end
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import ${package.Entity}.${entity};
 import ${package.Dto}.${table.dtoName};
 
 /**
- * <p>
+ * $!{table.comment}
+ *
  * @author ${author}
  * @since ${date}
  */
 @Mapper(componentModel = "spring")
 public abstract class ${entity}MapStruct extends ${superMapStructClass}<${entity}DTO,${entity}>{
 
-    public static final ${entity}MapStruct INSTANCE = Mappers.getMapper(${entity}MapStruct.class);
+public static final ${entity}MapStruct INSTANCE=Mappers.getMapper(${entity}MapStruct.class);
 
-    @Override
-    public abstract ${entity} toEntity(${entity}DTO ${table.entityPath}DTO);
-    @Override
-    public abstract ${entity}DTO toDto(${entity} ${table.entityPath});
-    @Override
-    public abstract ${entity} copyEntity(${entity} ${table.entityPath});
-    @Override
-    public abstract ${entity}DTO copyDto(${entity}DTO ${table.entityPath}DTO);
-}
+@Override
+public abstract ${entity} toEntity(${entity}DTO ${table.entityPath}DTO);
+@Override
+public abstract ${entity}DTO toDto(${entity} ${table.entityPath});
+@Override
+public abstract ${entity} copyEntity(${entity} ${table.entityPath});
+@Override
+public abstract ${entity}DTO copyDto(${entity}DTO ${table.entityPath}DTO);
+        }

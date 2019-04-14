@@ -17,8 +17,8 @@ package com.developer.mousika.generator.engine;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.developer.mousika.generator.config.ConstVal;
-import com.developer.mousika.generator.config.builder.ConfigBuilder;
+import com.developer.mousika.config.ConstVal;
+import com.developer.mousika.config.builder.ConfigBuilder;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;

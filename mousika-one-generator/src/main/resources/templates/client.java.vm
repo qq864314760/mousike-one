@@ -1,0 +1,45 @@
+package ${package.Client};
+
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Map;
+
+@AuthorizedFeignClient(name = "${instance.Fls.ServiceAppName}", url = "${instance.Fls.ServiceHost}")
+public interface ${entity}Client {
+    /**
+     * 获取列表
+     */
+    @RequestMapping(value = "/api/${resource}s", method = RequestMethod.GET)
+    ResponseEntity<List<${entity}DTO>> get${entity}List(@RequestParam Map param);
+
+    /**
+    * 根据id，获取单个信息
+    */
+    @RequestMapping(value = "/api/${resource}s/{id}", method = RequestMethod.GET)
+    ResponseEntity<List<${entity}DTO>> get${entity}(@RequestParam Map param);
+
+    /**
+     * 添加新的数据
+     */
+    @RequestMapping(value = "/api/${resource}s", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<${entity}DTO> add${entity}(${entity}DTO ${entity.toLowerCase()}DTO);
+
+    /***
+     * 根据id，删除单个数据
+     */
+    @RequestMapping(value = "/api/${resource}s/{id}", method = RequestMethod.DELETE)
+    ResponseEntity<Boolean> delete${entity}ById(@PathVariable("id") String id);
+
+    /**
+     * 修改数据
+     */
+    @RequestMapping(value = "/api/${resource}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<${entity}DTO> update${entity}(${entity}DTO ${entity.toLowerCase()}DTO);
+
+}

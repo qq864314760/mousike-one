@@ -1,6 +1,6 @@
 package com.developer.mousika.exception;
 
-import com.developer.mousika.generator.config.ErrorConstants;
+import com.developer.mousika.config.ErrorConstants;
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
 

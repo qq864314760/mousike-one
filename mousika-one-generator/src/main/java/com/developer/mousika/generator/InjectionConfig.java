@@ -15,9 +15,9 @@
  */
 package com.developer.mousika.generator;
 
-import com.developer.mousika.generator.config.FileOutConfig;
-import com.developer.mousika.generator.config.IFileCreate;
-import com.developer.mousika.generator.config.builder.ConfigBuilder;
+import com.developer.mousika.config.FileOutConfig;
+import com.developer.mousika.config.IFileCreate;
+import com.developer.mousika.config.builder.ConfigBuilder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

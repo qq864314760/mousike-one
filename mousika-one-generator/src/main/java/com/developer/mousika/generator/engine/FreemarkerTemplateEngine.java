@@ -16,8 +16,8 @@
 package com.developer.mousika.generator.engine;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.developer.mousika.generator.config.ConstVal;
-import com.developer.mousika.generator.config.builder.ConfigBuilder;
+import com.developer.mousika.config.ConstVal;
+import com.developer.mousika.config.builder.ConfigBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 

@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2016, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -21,9 +21,7 @@ import com.developer.mousika.config.rules.DbColumnType;
 import com.developer.mousika.config.rules.IColumnType;
 
 /**
- * <p>
  * PostgreSQL 字段类型转换
- * </p>
  *
  * @author hubin
  * @since 2017-01-20
@@ -33,14 +31,37 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         String t = fieldType.toLowerCase();
-        if (t.contains("char") || t.contains("text")) {
+        if (t.contains("char")) {
             return DbColumnType.STRING;
         } else if (t.contains("bigint")) {
             return DbColumnType.LONG;
         } else if (t.contains("int")) {
             return DbColumnType.INTEGER;
-        } else if (t.contains("date") || t.contains("time") || t.contains("year")) {
-            return DbColumnType.DATE;
+        } else if (t.contains("date") || t.contains("time")) {
+            switch (globalConfig.getDateType()) {
+                case ONLY_DATE:
+                    return DbColumnType.DATE;
+                case SQL_PACK:
+                    switch (t) {
+                        case "date":
+                            return DbColumnType.DATE_SQL;
+                        case "time":
+                            return DbColumnType.TIME;
+                        default:
+                            return DbColumnType.TIMESTAMP;
+                    }
+                case TIME_PACK:
+                    switch (t) {
+                        case "date":
+                            return DbColumnType.LOCAL_DATE;
+                        case "time":
+                            return DbColumnType.LOCAL_TIME;
+                        default:
+                            return DbColumnType.LOCAL_DATE_TIME;
+                    }
+                default:
+                    return DbColumnType.DATE;
+            }
         } else if (t.contains("text")) {
             return DbColumnType.STRING;
         } else if (t.contains("bit")) {
@@ -59,8 +80,6 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
             return DbColumnType.STRING;
         } else if (t.contains("boolean")) {
             return DbColumnType.BOOLEAN;
-        } else if (t.contains("numeric")) {
-            return DbColumnType.BIG_DECIMAL;
         }
         return DbColumnType.STRING;
     }

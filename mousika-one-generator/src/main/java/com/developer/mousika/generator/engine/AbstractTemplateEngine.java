@@ -20,13 +20,13 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.toolkit.PackageHelper;
 import com.developer.mousika.generator.InjectionConfig;
-import com.developer.mousika.generator.config.ConstVal;
-import com.developer.mousika.generator.config.FileOutConfig;
-import com.developer.mousika.generator.config.GlobalConfig;
-import com.developer.mousika.generator.config.TemplateConfig;
-import com.developer.mousika.generator.config.builder.ConfigBuilder;
-import com.developer.mousika.generator.config.po.TableInfo;
-import com.developer.mousika.generator.config.rules.FileType;
+import com.developer.mousika.config.ConstVal;
+import com.developer.mousika.config.FileOutConfig;
+import com.developer.mousika.config.GlobalConfig;
+import com.developer.mousika.config.TemplateConfig;
+import com.developer.mousika.config.builder.ConfigBuilder;
+import com.developer.mousika.config.po.TableInfo;
+import com.developer.mousika.config.rules.FileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -277,7 +277,9 @@ public abstract class AbstractTemplateEngine {
         /**+S+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
         objectMap.put("superDtoClass", getSuperClassName(config.getSuperDtoClass()));
         objectMap.put("superMapStructClass", getSuperClassName(config.getSuperMapStructClass()));
-        objectMap.put("resource",config.getStrategyConfig().getResource());
+
+        objectMap.put("resource",config.getStrategyConfig().getResourceName());
+        objectMap.put("superResourceClass", getSuperClassName(config.getSuperResourceClass()));
         /**+E+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
         return objectMap;
     }

@@ -25,6 +25,12 @@
     </properties>
 
     <dependencies>
+        <!--如果要添加新的生成模板千万不要放开，自定义模板需要改源码的 -->
+        <!--<dependency>-->
+            <!--<groupId>com.baomidou</groupId>-->
+            <!--<artifactId>mybatis-plus-generator</artifactId>-->
+            <!--<version>${mybatis-plus-boot-starter.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>

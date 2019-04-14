@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2020, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -17,12 +17,10 @@ package com.developer.mousika.config;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
- * <p>
  * 定义常量
- * </p>
  *
  * @author YangHu, tangguo, hubin
  * @since 2016-08-31
@@ -32,19 +30,13 @@ public interface ConstVal {
     String MODULE_NAME = "ModuleName";
 
     String ENTITY = "Entity";
-    String DTO = "Dto";
-    String UTIL = "Util";
-    String MAP_STRUCT = "MapStruct";
     String SERVICE = "Service";
     String SERVICE_IMPL = "ServiceImpl";
     String MAPPER = "Mapper";
     String XML = "Xml";
     String CONTROLLER = "Controller";
 
-    String UTIL_PATH = "util_path";
     String ENTITY_PATH = "entity_path";
-    String DTO_PATH = "dto_path";
-    String MAP_STRUCT_PATH = "mapStruct_path";
     String SERVICE_PATH = "service_path";
     String SERVICE_IMPL_PATH = "service_impl_path";
     String MAPPER_PATH = "mapper_path";
@@ -52,7 +44,7 @@ public interface ConstVal {
     String CONTROLLER_PATH = "controller_path";
 
     String JAVA_TMPDIR = "java.io.tmpdir";
-    String UTF8 = Charset.forName("UTF-8").name();
+    String UTF8 = StandardCharsets.UTF_8.name();
     String UNDERLINE = "_";
 
     String JAVA_SUFFIX = StringPool.DOT_JAVA;
@@ -60,8 +52,6 @@ public interface ConstVal {
     String XML_SUFFIX = ".xml";
 
     String TEMPLATE_ENTITY_JAVA = "/templates/entity.java";
-    String TEMPLATE_DTO_JAVA = "/templates/dto.java";
-    String TEMPLATE_MAP_STRUCT_JAVA = "/templates/mapStruct.java";
     String TEMPLATE_ENTITY_KT = "/templates/entity.kt";
     String TEMPLATE_MAPPER = "/templates/mapper.java";
     String TEMPLATE_XML = "/templates/mapper.xml";
@@ -76,4 +66,26 @@ public interface ConstVal {
     String SUPER_SERVICE_CLASS = "com.baomidou.mybatisplus.extension.service.IService";
     String SUPER_SERVICE_IMPL_CLASS = "com.baomidou.mybatisplus.extension.service.impl.ServiceImpl";
 
+    /**+S+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    String DTO = "Dto";
+    String MAP_STRUCT = "MapStruct";
+    String RESOURCE = "Resource";
+
+    String DTO_PATH = "dto_path";
+    String MAP_STRUCT_PATH = "map_struct_path";
+    String RESOURCE_PATH = "resource_path";
+
+    String ANGLUAR_ENTITY = "AngluarEntity";
+    String ANGLUAR_HTTP_SERVICE = "AngluarHttpService";
+
+    String ANGLUAR_ENTITY_PATH = "angluar_entity_path";
+    String ANGLUAR_HTTP_SERVICE_PATH = "angluar_http_service_path";
+
+    String TEMPLATE_DTO_JAVA = "/templates/dto.java";
+    String TEMPLATE_MAP_STRUCT_JAVA = "/templates/mapStruct.java";
+    String TEMPLATE_RESOURCE_JAVA = "/templates/resource.java";
+
+    String TEMPLATE_ANGLUAR_ENTITY_TS = "/templates/entity.ts";
+    String TEMPLATE_ANGLUAR_HTTP_SERVICE_TS = "/templates/httpService.ts";
+    /**+E+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 }

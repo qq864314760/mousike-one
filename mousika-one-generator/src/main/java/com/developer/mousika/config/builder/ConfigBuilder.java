@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2020, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -22,7 +22,9 @@ import com.developer.mousika.config.*;
 import com.developer.mousika.config.po.TableField;
 import com.developer.mousika.config.po.TableFill;
 import com.developer.mousika.config.po.TableInfo;
+import com.developer.mousika.config.querys.H2Query;
 import com.developer.mousika.config.rules.NamingStrategy;
+import com.developer.mousika.generator.InjectionConfig;
 
 import java.io.File;
 import java.sql.Connection;
@@ -32,12 +34,11 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * <p>
  * 配置汇总 传递给文件生成工具
- * </p>
  *
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
+ * 此类方法加了自定义
  */
 public class ConfigBuilder {
 
@@ -58,20 +59,19 @@ public class ConfigBuilder {
      */
     private IDbQuery dbQuery;
     private String superEntityClass;
-    private String superDtoClass;
     private String superMapperClass;
+    /**
+     * 自定义DTO、MAP_STRUCT、RESOURCE
+     * */
+    private String superDtoClass;
     private String superMapStructClass;
+    private String superResourceClass;
     /**
      * service超类定义
      */
     private String superServiceClass;
     private String superServiceImplClass;
     private String superControllerClass;
-
-    /**
-     * 方法上资源访问路径
-     */
-    private String resource;
     /**
      * 数据库表信息
      */
@@ -99,9 +99,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 在构造器中处理配置
-     * </p>
      *
      * @param packageConfig    包配置
      * @param dataSourceConfig 数据源配置
@@ -143,9 +141,7 @@ public class ConfigBuilder {
     // ************************ 曝露方法 BEGIN*****************************
 
     /**
-     * <p>
      * 所有包配置信息
-     * </p>
      *
      * @return 包配置
      */
@@ -155,9 +151,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 所有路径配置
-     * </p>
      *
      * @return 路径配置
      */
@@ -170,23 +164,37 @@ public class ConfigBuilder {
         return superEntityClass;
     }
 
+
+    public String getSuperMapperClass() {
+        return superMapperClass;
+    }
+
     public String getSuperDtoClass() {
         return superDtoClass;
+    }
+
+    public void setSuperDtoClass(String superDtoClass) {
+        this.superDtoClass = superDtoClass;
     }
 
     public String getSuperMapStructClass() {
         return superMapStructClass;
     }
 
-    public String getSuperMapperClass() {
-        return superMapperClass;
+    public void setSuperMapStructClass(String superMapStructClass) {
+        this.superMapStructClass = superMapStructClass;
     }
 
+    public String getSuperResourceClass() {
+        return superResourceClass;
+    }
+
+    public void setSuperResourceClass(String superResourceClass) {
+        this.superResourceClass = superResourceClass;
+    }
 
     /**
-     * <p>
      * 获取超类定义
-     * </p>
      *
      * @return 完整超类名称
      */
@@ -206,9 +214,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 表信息
-     * </p>
      *
      * @return 所有表信息
      */
@@ -223,9 +229,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 模板路径配置信息
-     * </p>
      *
      * @return 所以模板路径配置信息
      */
@@ -236,9 +240,7 @@ public class ConfigBuilder {
     // ****************************** 曝露方法 END**********************************
 
     /**
-     * <p>
      * 处理包配置
-     * </p>
      *
      * @param template  TemplateConfig
      * @param outputDir
@@ -246,17 +248,26 @@ public class ConfigBuilder {
      */
     private void handlerPackage(TemplateConfig template, String outputDir, PackageConfig config) {
         // 包信息
-        packageInfo = new HashMap<>(8);
+        packageInfo = new HashMap<>(12);
         packageInfo.put(ConstVal.MODULE_NAME, config.getModuleName());
         packageInfo.put(ConstVal.ENTITY, joinPackage(config.getParent(), config.getEntity()));
-        packageInfo.put(ConstVal.DTO, joinPackage(config.getParent(), config.getDto()));
-        packageInfo.put(ConstVal.MAP_STRUCT,joinPackage(config.getParent(),config.getMapStruct()));
-        packageInfo.put(ConstVal.UTIL, joinPackage(config.getParent(), config.getUtil()));
         packageInfo.put(ConstVal.MAPPER, joinPackage(config.getParent(), config.getMapper()));
         packageInfo.put(ConstVal.XML, joinPackage(config.getParent(), config.getXml()));
         packageInfo.put(ConstVal.SERVICE, joinPackage(config.getParent(), config.getService()));
         packageInfo.put(ConstVal.SERVICE_IMPL, joinPackage(config.getParent(), config.getServiceImpl()));
         packageInfo.put(ConstVal.CONTROLLER, joinPackage(config.getParent(), config.getController()));
+
+        /**
+         * 自定义DTO、MAP_STRUCT、RESOURCE
+         * */
+        packageInfo.put(ConstVal.DTO, joinPackage(config.getParent(), config.getDto()));
+        packageInfo.put(ConstVal.MAP_STRUCT, joinPackage(config.getParent(), config.getMapStruct()));
+        packageInfo.put(ConstVal.RESOURCE, joinPackage(config.getParent(), config.getResource()));
+        /**
+         * 自定义Angluar相关
+         * */
+        packageInfo.put(ConstVal.ANGLUAR_ENTITY, joinPackage(config.getParent(), config.getAngluarEntity()));
+        packageInfo.put(ConstVal.ANGLUAR_HTTP_SERVICE, joinPackage(config.getParent(), config.getAngluarHttpService()));
 
         // 自定义路径
         Map<String, String> configPathInfo = config.getPathInfo();
@@ -264,15 +275,25 @@ public class ConfigBuilder {
             pathInfo = configPathInfo;
         } else {
             // 生成路径信息
-            pathInfo = new HashMap<>(8);
+            pathInfo = new HashMap<>(12);
             setPathInfo(pathInfo, template.getEntity(getGlobalConfig().isKotlin()), outputDir, ConstVal.ENTITY_PATH, ConstVal.ENTITY);
-            setPathInfo(pathInfo, template.getDto(), outputDir, ConstVal.DTO_PATH, ConstVal.DTO);
-            setPathInfo(pathInfo, template.getMapStruct(), outputDir, ConstVal.MAP_STRUCT_PATH, ConstVal.MAP_STRUCT);
             setPathInfo(pathInfo, template.getMapper(), outputDir, ConstVal.MAPPER_PATH, ConstVal.MAPPER);
             setPathInfo(pathInfo, template.getXml(), outputDir, ConstVal.XML_PATH, ConstVal.XML);
             setPathInfo(pathInfo, template.getService(), outputDir, ConstVal.SERVICE_PATH, ConstVal.SERVICE);
             setPathInfo(pathInfo, template.getServiceImpl(), outputDir, ConstVal.SERVICE_IMPL_PATH, ConstVal.SERVICE_IMPL);
             setPathInfo(pathInfo, template.getController(), outputDir, ConstVal.CONTROLLER_PATH, ConstVal.CONTROLLER);
+
+            /**
+             * 自定义DTO、MAP_STRUCT、RESOURCE
+             * */
+            setPathInfo(pathInfo, template.getDto(), outputDir, ConstVal.DTO_PATH, ConstVal.DTO);
+            setPathInfo(pathInfo, template.getMapStruct(), outputDir, ConstVal.MAP_STRUCT_PATH, ConstVal.MAP_STRUCT);
+            setPathInfo(pathInfo, template.getResource(), outputDir, ConstVal.RESOURCE_PATH, ConstVal.RESOURCE);
+            /**
+             * 自定义Angluar相关
+             * */
+            setPathInfo(pathInfo, template.getAngluarEntity(), outputDir, ConstVal.ANGLUAR_ENTITY_PATH, ConstVal.ANGLUAR_ENTITY);
+            setPathInfo(pathInfo, template.getAngluarHttpService(), outputDir, ConstVal.ANGLUAR_HTTP_SERVICE_PATH, ConstVal.ANGLUAR_HTTP_SERVICE);
         }
     }
 
@@ -283,9 +304,7 @@ public class ConfigBuilder {
     }
 
     /**
-     * <p>
      * 处理数据源配置
-     * </p>
      *
      * @param config DataSourceConfig
      */
@@ -296,9 +315,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 处理数据库表 加载数据库表、列、注释相关数据集
-     * </p>
      *
      * @param config StrategyConfig
      */
@@ -309,9 +326,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 处理superClassName,IdClassType,IdStrategy配置
-     * </p>
      *
      * @param config 策略配置
      */
@@ -332,17 +347,25 @@ public class ConfigBuilder {
             superMapperClass = config.getSuperMapperClass();
         }
         superEntityClass = config.getSuperEntityClass();
-        superDtoClass = config.getSuperDtoClass();
-        superMapStructClass = config.getSuperMapStructClass();
         superControllerClass = config.getSuperControllerClass();
-        resource = config.getResource();
+
+        /**
+         * 自定义DTO、MAP_STRUCT、RESOURCE
+         * */
+        if (!StringUtils.isEmpty(config.getSuperDtoClass())) {
+            superDtoClass = config.getSuperDtoClass();
+        }
+        if (!StringUtils.isEmpty(config.getSuperMapStructClass())) {
+            superMapStructClass = config.getSuperMapStructClass();
+        }
+        if (!StringUtils.isEmpty(config.getSuperResourceClass())) {
+            superResourceClass = config.getSuperResourceClass();
+        }
     }
 
 
     /**
-     * <p>
      * 处理表对应的类名称
-     * </P>
      *
      * @param tableList 表名称
      * @param strategy  命名策略
@@ -359,8 +382,6 @@ public class ConfigBuilder {
             } else {
                 tableInfo.setEntityName(strategyConfig, entityName);
             }
-            tableInfo.setDtoName(NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategy, tablePrefix))+"DTO");
-            tableInfo.setMapStructName(NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategy, tablePrefix)) + ConstVal.MAP_STRUCT);
             if (StringUtils.isNotEmpty(globalConfig.getMapperName())) {
                 tableInfo.setMapperName(String.format(globalConfig.getMapperName(), entityName));
             } else {
@@ -386,6 +407,38 @@ public class ConfigBuilder {
             } else {
                 tableInfo.setControllerName(entityName + ConstVal.CONTROLLER);
             }
+
+            /**
+             * 自定义DTO、MAP_STRUCT、RESOURCE
+             * */
+            if (StringUtils.isNotEmpty(globalConfig.getDtoName())) {
+                tableInfo.setDtoName(String.format(globalConfig.getDtoName(), entityName));
+            } else {
+                tableInfo.setDtoName(entityName + ConstVal.DTO);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getMapStructName())) {
+                tableInfo.setMapStructName(String.format(globalConfig.getMapStructName(), entityName));
+            } else {
+                tableInfo.setMapStructName(entityName + ConstVal.MAP_STRUCT);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getResourceName())) {
+                tableInfo.setResource(String.format(globalConfig.getResourceName(), entityName));
+            } else {
+                tableInfo.setResource(entityName + ConstVal.RESOURCE);
+            }
+            /**
+             * 自定义Angluar相关
+             * */
+            if (StringUtils.isNotEmpty(globalConfig.getAngluarEntityName())) {
+                tableInfo.setAngluarEntity(String.format(globalConfig.getAngluarEntityName(), entityName));
+            } else {
+                tableInfo.setAngluarEntity(entityName + ConstVal.ANGLUAR_ENTITY);
+            }
+            if (StringUtils.isNotEmpty(globalConfig.getAngluarHttpServiceName())) {
+                tableInfo.setAngluarHttpService(String.format(globalConfig.getAngluarHttpServiceName(), entityName));
+            } else {
+                tableInfo.setAngluarHttpService(entityName + ConstVal.ANGLUAR_HTTP_SERVICE);
+            }
             // 检测导入包
             checkImportPackages(tableInfo);
         }
@@ -393,11 +446,9 @@ public class ConfigBuilder {
     }
 
     /**
-     * <p>
      * 检测导入包
-     * </p>
      *
-     * @param tableInfo
+     * @param tableInfo ignore
      */
     private void checkImportPackages(TableInfo tableInfo) {
         if (StringUtils.isNotEmpty(strategyConfig.getSuperEntityClass())) {
@@ -423,9 +474,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 获取所有的数据库表信息
-     * </p>
      */
     private List<TableInfo> getTablesInfo(StrategyConfig config) {
         boolean isInclude = (null != config.getInclude() && config.getInclude().length > 0);
@@ -442,7 +491,6 @@ public class ConfigBuilder {
 
         //不存在的表名
         Set<String> notExistTables = new HashSet<>();
-        PreparedStatement preparedStatement = null;
         try {
             String tablesSql = dbQuery.tablesSql();
             if (DbType.POSTGRE_SQL == dbQuery.dbType()) {
@@ -477,45 +525,45 @@ public class ConfigBuilder {
                     tablesSql = sb.toString();
                 }
             }
-            preparedStatement = connection.prepareStatement(tablesSql);
-            ResultSet results = preparedStatement.executeQuery();
             TableInfo tableInfo;
-            while (results.next()) {
-                String tableName = results.getString(dbQuery.tableName());
-                if (StringUtils.isNotEmpty(tableName)) {
-                    String tableComment = results.getString(dbQuery.tableComment());
-                    if (config.isSkipView() && "VIEW".equals(tableComment)) {
-                        // 跳过视图
-                        continue;
-                    }
-                    tableInfo = new TableInfo();
-                    tableInfo.setName(tableName);
-                    tableInfo.setComment(tableComment);
-                    if (isInclude) {
-                        for (String includeTable : config.getInclude()) {
-                            // 忽略大小写等于 或 正则 true
-                            if (tableNameMatches(includeTable, tableName)) {
-                                includeTableList.add(tableInfo);
-                            } else {
-                                notExistTables.add(includeTable);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(tablesSql);
+                 ResultSet results = preparedStatement.executeQuery()) {
+                while (results.next()) {
+                    String tableName = results.getString(dbQuery.tableName());
+                    if (StringUtils.isNotEmpty(tableName)) {
+                        String tableComment = results.getString(dbQuery.tableComment());
+                        if (config.isSkipView() && "VIEW".equals(tableComment)) {
+                            // 跳过视图
+                            continue;
+                        }
+                        tableInfo = new TableInfo();
+                        tableInfo.setName(tableName);
+                        tableInfo.setComment(tableComment);
+                        if (isInclude) {
+                            for (String includeTable : config.getInclude()) {
+                                // 忽略大小写等于 或 正则 true
+                                if (tableNameMatches(includeTable, tableName)) {
+                                    includeTableList.add(tableInfo);
+                                } else {
+                                    notExistTables.add(includeTable);
+                                }
+                            }
+                        } else if (isExclude) {
+                            for (String excludeTable : config.getExclude()) {
+                                // 忽略大小写等于 或 正则 true
+                                if (tableNameMatches(excludeTable, tableName)) {
+                                    excludeTableList.add(tableInfo);
+                                } else {
+                                    notExistTables.add(excludeTable);
+                                }
                             }
                         }
-                    } else if (isExclude) {
-                        for (String excludeTable : config.getExclude()) {
-                            // 忽略大小写等于 或 正则 true
-                            if (tableNameMatches(excludeTable, tableName)) {
-                                excludeTableList.add(tableInfo);
-                            } else {
-                                notExistTables.add(excludeTable);
-                            }
-                        }
+                        tableList.add(tableInfo);
+                    } else {
+                        System.err.println("当前数据库为空！！！");
                     }
-                    tableList.add(tableInfo);
-                } else {
-                    System.err.println("当前数据库为空！！！");
                 }
             }
-
             // 将已经存在的表移除，获取配置中数据库不存在的表
             for (TableInfo tabInfo : tableList) {
                 notExistTables.remove(tabInfo.getName());
@@ -532,115 +580,121 @@ public class ConfigBuilder {
             if (!isInclude && !isExclude) {
                 includeTableList = tableList;
             }
-            /**
-             * 性能优化，只处理需执行表字段 github issues/219
-             */
+            // 性能优化，只处理需执行表字段 github issues/219
             includeTableList.forEach(ti -> convertTableFields(ti, config.getColumnNaming()));
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            // 释放资源
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return processTable(includeTableList, config.getNaming(), config);
     }
 
 
     /**
-     * <p>
      * 表名匹配
-     * </p>
      *
      * @param setTableName 设置表名
      * @param dbTableName  数据库表单
-     * @return
+     * @return ignore
      */
     private boolean tableNameMatches(String setTableName, String dbTableName) {
         return setTableName.equals(dbTableName)
-            || StringUtils.matches(setTableName, dbTableName);
+                || StringUtils.matches(setTableName, dbTableName);
     }
 
     /**
-     * <p>
      * 将字段信息与表信息关联
-     * </p>
      *
      * @param tableInfo 表信息
      * @param strategy  命名策略
-     * @return
+     * @return ignore
      */
     private TableInfo convertTableFields(TableInfo tableInfo, NamingStrategy strategy) {
         boolean haveId = false;
         List<TableField> fieldList = new ArrayList<>();
         List<TableField> commonFieldList = new ArrayList<>();
+        DbType dbType = dbQuery.dbType();
+        String tableName = tableInfo.getName();
         try {
             String tableFieldsSql = dbQuery.tableFieldsSql();
-            if (DbType.POSTGRE_SQL == dbQuery.dbType()) {
-                tableFieldsSql = String.format(tableFieldsSql, dataSourceConfig.getSchemaName(), tableInfo.getName());
-            } else if (DbType.ORACLE == dbQuery.dbType()) {
-                tableFieldsSql = String.format(tableFieldsSql.replace("#schema", dataSourceConfig.getSchemaName()), tableInfo.getName());
+            Set<String> h2PkColumns = new HashSet<>();
+            if (DbType.POSTGRE_SQL == dbType) {
+                tableFieldsSql = String.format(tableFieldsSql, dataSourceConfig.getSchemaName(), tableName);
+            } else if (DbType.ORACLE == dbType) {
+                tableName = tableName.toUpperCase();
+                tableFieldsSql = String.format(tableFieldsSql.replace("#schema", dataSourceConfig.getSchemaName()), tableName);
+            } else if (DbType.H2 == dbType) {
+                tableName = tableName.toUpperCase();
+                try (PreparedStatement pkQueryStmt = connection.prepareStatement(String.format(H2Query.PK_QUERY_SQL, tableName));
+                     ResultSet pkResults = pkQueryStmt.executeQuery()) {
+                    while (pkResults.next()) {
+                        String primaryKey = pkResults.getString(dbQuery.fieldKey());
+                        if (Boolean.valueOf(primaryKey)) {
+                            h2PkColumns.add(pkResults.getString(dbQuery.fieldName()));
+                        }
+                    }
+                }
+                tableFieldsSql = String.format(tableFieldsSql, tableName);
             } else {
-                tableFieldsSql = String.format(tableFieldsSql, tableInfo.getName());
+                tableFieldsSql = String.format(tableFieldsSql, tableName);
             }
-            PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql);
-            ResultSet results = preparedStatement.executeQuery();
-            while (results.next()) {
-                TableField field = new TableField();
-                String key = results.getString(dbQuery.fieldKey());
-                // 避免多重主键设置，目前只取第一个找到ID，并放到list中的索引为0的位置
-                boolean isId;
-                if (DbType.DB2 == dbQuery.dbType()) {
-                    isId = StringUtils.isNotEmpty(key) && "1".equals(key);
-                } else {
-                    isId = StringUtils.isNotEmpty(key) && "PRI".equals(key.toUpperCase());
-                }
-                // 处理ID
-                if (isId && !haveId) {
-                    field.setKeyFlag(true);
-                    if (dbQuery.isKeyIdentity(results)) {
-                        field.setKeyIdentityFlag(true);
+            try (
+                    PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql);
+                    ResultSet results = preparedStatement.executeQuery()) {
+                while (results.next()) {
+                    TableField field = new TableField();
+                    String columnName = results.getString(dbQuery.fieldName());
+                    // 避免多重主键设置，目前只取第一个找到ID，并放到list中的索引为0的位置
+                    boolean isId;
+                    if (DbType.H2 == dbType) {
+                        isId = h2PkColumns.contains(columnName);
+                    } else {
+                        String key = results.getString(dbQuery.fieldKey());
+                        if (DbType.DB2 == dbType) {
+                            isId = StringUtils.isNotEmpty(key) && "1".equals(key);
+                        } else {
+                            isId = StringUtils.isNotEmpty(key) && "PRI".equals(key.toUpperCase());
+                        }
                     }
-                    haveId = true;
-                } else {
-                    field.setKeyFlag(false);
-                }
-                // 自定义字段查询
-                String[] fcs = dbQuery.fieldCustom();
-                if (null != fcs) {
-                    Map<String, Object> customMap = new HashMap<>();
-                    for (String fc : fcs) {
-                        customMap.put(fc, results.getObject(fc));
+
+                    // 处理ID
+                    if (isId && !haveId) {
+                        field.setKeyFlag(true);
+                        if (DbType.H2 == dbType || dbQuery.isKeyIdentity(results)) {
+                            field.setKeyIdentityFlag(true);
+                        }
+                        haveId = true;
+                    } else {
+                        field.setKeyFlag(false);
                     }
-                    field.setCustomMap(customMap);
+                    // 自定义字段查询
+                    String[] fcs = dbQuery.fieldCustom();
+                    if (null != fcs) {
+                        Map<String, Object> customMap = new HashMap<>();
+                        for (String fc : fcs) {
+                            customMap.put(fc, results.getObject(fc));
+                        }
+                        field.setCustomMap(customMap);
+                    }
+                    // 处理其它信息
+                    field.setName(columnName);
+                    field.setType(results.getString(dbQuery.fieldType()));
+                    field.setPropertyName(strategyConfig, processName(field.getName(), strategy));
+                    field.setColumnType(dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType()));
+                    field.setComment(results.getString(dbQuery.fieldComment()));
+                    if (strategyConfig.includeSuperEntityColumns(field.getName())) {
+                        // 跳过公共字段
+                        commonFieldList.add(field);
+                        continue;
+                    }
+                    // 填充逻辑判断
+                    List<TableFill> tableFillList = getStrategyConfig().getTableFillList();
+                    if (null != tableFillList) {
+                        // 忽略大写字段问题
+                        tableFillList.stream().filter(tf -> tf.getFieldName().equalsIgnoreCase(field.getName()))
+                                .findFirst().ifPresent(tf -> field.setFill(tf.getFieldFill().name()));
+                    }
+                    fieldList.add(field);
                 }
-                // 处理其它信息
-                field.setName(results.getString(dbQuery.fieldName()));
-                field.setType(results.getString(dbQuery.fieldType()));
-                field.setPropertyName(strategyConfig, processName(field.getName(), strategy));
-                field.setColumnType(dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType()));
-                field.setComment(results.getString(dbQuery.fieldComment()));
-                if (strategyConfig.includeSuperEntityColumns(field.getName())) {
-                    // 跳过公共字段
-                    commonFieldList.add(field);
-                    continue;
-                }
-                // 填充逻辑判断
-                List<TableFill> tableFillList = getStrategyConfig().getTableFillList();
-                if (null != tableFillList) {
-                    // 忽略大写字段问题
-                    tableFillList.stream().filter(tf -> tf.getFieldName().equalsIgnoreCase(field.getName()))
-                        .findFirst().ifPresent(tf -> field.setFill(tf.getFieldFill().name()));
-                }
-                fieldList.add(field);
             }
         } catch (SQLException e) {
             System.err.println("SQL Exception：" + e.getMessage());
@@ -652,9 +706,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 连接路径字符串
-     * </p>
      *
      * @param parentDir   路径常量字符串
      * @param packageName 包名
@@ -673,9 +725,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 连接父子包名
-     * </p>
      *
      * @param parent     父包名
      * @param subPackage 子包名
@@ -690,9 +740,7 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 处理字段名称
-     * </p>
      *
      * @return 根据策略返回处理后的名称
      */
@@ -702,18 +750,16 @@ public class ConfigBuilder {
 
 
     /**
-     * <p>
      * 处理表/字段名称
-     * </p>
      *
-     * @param name
-     * @param strategy
-     * @param prefix
+     * @param name     ignore
+     * @param strategy ignore
+     * @param prefix   ignore
      * @return 根据策略返回处理后的名称
      */
     private String processName(String name, NamingStrategy strategy, String[] prefix) {
         boolean removePrefix = false;
-        if (prefix != null && prefix.length >= 1) {
+        if (prefix != null && prefix.length != 0) {
             removePrefix = true;
         }
         String propertyName;
@@ -766,9 +812,5 @@ public class ConfigBuilder {
     public ConfigBuilder setInjectionConfig(InjectionConfig injectionConfig) {
         this.injectionConfig = injectionConfig;
         return this;
-    }
-
-    public String getResource() {
-        return resource;
     }
 }

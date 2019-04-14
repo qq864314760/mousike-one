@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2020, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -24,11 +24,11 @@ import lombok.experimental.Accessors;
 import java.util.Map;
 
 /**
- * <p>
  * 跟包相关的配置项
  *
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
+ * 此类方法加了自定义
  */
 
 @Data
@@ -38,34 +38,19 @@ public class PackageConfig {
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
      */
-    private String parent = "com.sinfusi.democracy";
-
+    private String parent = "com.baomidou";
     /**
      * 父包模块名
      */
     private String moduleName = null;
-
     /**
      * Entity包名
      */
     private String entity = "entity";
     /**
-     * DTO包名
-     */
-    private String dto = "dto";
-    /**
-     * mapStruct包名
-     */
-    private String mapStruct = "mapstruct";
-    /**
-     * 工具类包名
-     */
-    private String util = "util";
-    /**
      * Service包名
      */
     private String service = "service";
-
     /**
      * Service Impl包名
      */
@@ -74,22 +59,18 @@ public class PackageConfig {
      * Mapper包名
      */
     private String mapper = "mapper";
-
     /**
      * Mapper XML包名
      */
     private String xml = "mapper.xml";
-
     /**
      * Controller包名
      */
     private String controller = "controller";
-
     /**
      * 路径配置信息
      */
     private Map<String, String> pathInfo;
-
 
     /**
      * 父包名
@@ -100,4 +81,31 @@ public class PackageConfig {
         }
         return parent;
     }
+
+    /**+S+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    /**
+     * DTO包名
+     */
+    private String dto = "dto";
+    /**
+     * mapStruct包名
+     */
+    private String mapStruct = "mapstruct";
+    /**
+     * 生成rest资源
+     */
+    private String resource = "resource";
+    /**
+     * 注册中心请求类
+     */
+    private String client = "client";
+    /**
+     * 生成Angluar实体
+     */
+    private String AngluarEntity = "angluarEntity";
+    /**
+     * 生成Angluar网路请求类
+     */
+    private String AngluarHttpService = "angluarHttpService";
+    /**+E+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 }

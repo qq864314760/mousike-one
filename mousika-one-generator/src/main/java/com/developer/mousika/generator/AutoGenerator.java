@@ -20,9 +20,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.developer.mousika.generator.config.*;
-import com.developer.mousika.generator.config.builder.ConfigBuilder;
-import com.developer.mousika.generator.config.po.TableInfo;
+import com.developer.mousika.config.*;
+import com.developer.mousika.config.builder.ConfigBuilder;
+import com.developer.mousika.config.po.TableInfo;
 import com.developer.mousika.generator.engine.AbstractTemplateEngine;
 import com.developer.mousika.generator.engine.VelocityTemplateEngine;
 import lombok.AccessLevel;
@@ -155,6 +155,43 @@ public class AutoGenerator {
                 tableInfo.setImportPackages(config.getSuperEntityClass());
                 importSerializable = false;
             }
+            /**+S+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+            if (StringUtils.isNotEmpty(config.getSuperDtoClass())) {
+                // 父实体DTO
+                tableInfo.setImportPackages(config.getSuperDtoClass());
+                importSerializable = false;
+            }
+            if (StringUtils.isNotEmpty(config.getSuperControllerClass())) {
+                // 父实体DTO
+                tableInfo.setImportPackages(config.getSuperControllerClass());
+                importSerializable = false;
+            }
+            if (StringUtils.isNotEmpty(config.getSuperMapperClass())) {
+                // 父实体DTO
+                tableInfo.setImportPackages(config.getSuperMapperClass());
+                importSerializable = false;
+            }
+            if (StringUtils.isNotEmpty(config.getSuperMapStructClass())) {
+                // 父实体DTO
+                tableInfo.setImportPackages(config.getSuperMapStructClass());
+                importSerializable = false;
+            }
+            if (StringUtils.isNotEmpty(config.getSuperResourceClass())) {
+                // 父实体DTO
+                tableInfo.setImportPackages(config.getSuperResourceClass());
+                importSerializable = false;
+            }
+            if (StringUtils.isNotEmpty(config.getSuperServiceClass())) {
+                // 父实体DTO
+                tableInfo.setImportPackages(config.getSuperServiceClass());
+                importSerializable = false;
+            }
+            if (StringUtils.isNotEmpty(config.getSuperServiceImplClass())) {
+                // 父实体DTO
+                tableInfo.setImportPackages(config.getSuperServiceImplClass());
+                importSerializable = false;
+            }
+            /**+E+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             if (config.getGlobalConfig().isActiveRecord()) {
                 importSerializable = true;
             }

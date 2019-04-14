@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2020, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -15,23 +15,25 @@
  */
 package com.developer.mousika.config;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 /**
- * <p>
  * 模板路径配置项
- * </p>
  *
  * @author tzg hubin
  * @since 2017-06-17
  */
+@Data
+@Accessors(chain = true)
 public class TemplateConfig {
 
+    @Getter(AccessLevel.NONE)
     private String entity = ConstVal.TEMPLATE_ENTITY_JAVA;
 
     private String entityKt = ConstVal.TEMPLATE_ENTITY_KT;
-
-    private String dto = ConstVal.TEMPLATE_DTO_JAVA;
-
-    private String mapStruct = ConstVal.TEMPLATE_MAP_STRUCT_JAVA;
 
     private String service = ConstVal.TEMPLATE_SERVICE;
 
@@ -47,76 +49,12 @@ public class TemplateConfig {
         return kotlin ? entityKt : entity;
     }
 
-    public TemplateConfig setEntityKt(String entityKt) {
-        this.entityKt = entityKt;
-        return this;
-    }
+    /**+S+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    private String dto = ConstVal.TEMPLATE_DTO_JAVA;
+    private String mapStruct = ConstVal.TEMPLATE_MAP_STRUCT_JAVA;
+    private String resource = ConstVal.TEMPLATE_RESOURCE_JAVA;
 
-    public TemplateConfig setEntity(String entity) {
-        this.entity = entity;
-        return this;
-    }
-
-    public String getService() {
-        return service;
-    }
-
-    public TemplateConfig setService(String service) {
-        this.service = service;
-        return this;
-    }
-
-    public String getServiceImpl() {
-        return serviceImpl;
-    }
-
-    public TemplateConfig setServiceImpl(String serviceImpl) {
-        this.serviceImpl = serviceImpl;
-        return this;
-    }
-
-    public String getMapper() {
-        return mapper;
-    }
-
-    public TemplateConfig setMapper(String mapper) {
-        this.mapper = mapper;
-        return this;
-    }
-
-    public String getXml() {
-        return xml;
-    }
-
-    public TemplateConfig setXml(String xml) {
-        this.xml = xml;
-        return this;
-    }
-
-    public String getController() {
-        return controller;
-    }
-
-    public TemplateConfig setController(String controller) {
-        this.controller = controller;
-        return this;
-    }
-    public String getDto() {
-        return dto;
-    }
-
-    public TemplateConfig setDto(String dto) {
-        this.dto = dto;
-        return this;
-    }
-
-    public String getMapStruct() {
-        return mapStruct;
-    }
-
-    public TemplateConfig setMapStruct(String mapStruct) {
-        this.mapStruct = mapStruct;
-        return this;
-    }
-
+    private String angluarEntity = ConstVal.TEMPLATE_ANGLUAR_ENTITY_TS;
+    private String angluarHttpService = ConstVal.TEMPLATE_ANGLUAR_HTTP_SERVICE_TS;
+    /**+E+新增++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 }

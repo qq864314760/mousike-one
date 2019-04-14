@@ -1,18 +1,20 @@
 package ${package.ServiceImpl};
 
+#foreach($pkg in ${table.importPackages})
+#if($pkg.indexOf("BaseServiceImpl") > -1)
+import ${pkg};
+#end
+#end
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
-import com.sinfusi.democracy.common.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>
  * $!{table.comment} 服务实现类
- * </p>
  *
  * @author ${author}
  * @since ${date}

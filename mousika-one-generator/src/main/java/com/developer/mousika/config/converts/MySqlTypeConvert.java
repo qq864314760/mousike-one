@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2016, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -21,9 +21,7 @@ import com.developer.mousika.config.rules.DbColumnType;
 import com.developer.mousika.config.rules.IColumnType;
 
 /**
- * <p>
  * MYSQL 数据库字段类型转换
- * </p>
  *
  * @author hubin
  * @since 2017-01-20
@@ -33,12 +31,12 @@ public class MySqlTypeConvert implements ITypeConvert {
     @Override
     public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         String t = fieldType.toLowerCase();
-        if (t.contains("char") || t.contains("text")) {
+        if (t.contains("char")) {
             return DbColumnType.STRING;
         } else if (t.contains("bigint")) {
             return DbColumnType.LONG;
-        } else if (t.contains("tinyint")) {
-            return DbColumnType.INTEGER;
+        } else if (t.contains("tinyint(1)")) {
+            return DbColumnType.BOOLEAN;
         } else if (t.contains("int")) {
             return DbColumnType.INTEGER;
         } else if (t.contains("text")) {
@@ -59,8 +57,6 @@ public class MySqlTypeConvert implements ITypeConvert {
             return DbColumnType.DOUBLE;
         } else if (t.contains("json") || t.contains("enum")) {
             return DbColumnType.STRING;
-        } else if (t.contains("timestamp")) {
-            return DbColumnType.TIMESTAMP;
         } else if (t.contains("date") || t.contains("time") || t.contains("year")) {
             switch (globalConfig.getDateType()) {
                 case ONLY_DATE:

@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2011-2020, hubin (jobob@qq.com).
+ * Copyright (c) 2011-2019, hubin (jobob@qq.com).
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -15,15 +15,13 @@
  */
 package com.developer.mousika.config;
 
-import com.baomidou.mybatisplus.annotation.DbType;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+
 /**
- * <p>
  * 表数据查询接口
- * </p>
  *
  * @author hubin
  * @since 2018-01-16
@@ -86,13 +84,11 @@ public interface IDbQuery {
 
 
     /**
-     * <p>
      * 判断主键是否为identity，目前仅对mysql进行检查
-     * </p>
      *
      * @param results ResultSet
      * @return 主键是否为identity
-     * @throws SQLException
+     * @throws SQLException ignore
      */
     boolean isKeyIdentity(ResultSet results) throws SQLException;
 

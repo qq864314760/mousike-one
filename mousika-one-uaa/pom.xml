@@ -19,6 +19,7 @@
         <java.version>1.8</java.version>
         <mousika-one-core.version>1.0-SNAPSHOT</mousika-one-core.version>
         <metrics.version>3.2.5</metrics.version>
+        <mapstruct.version>1.3.0.Final</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -32,15 +33,18 @@
             <artifactId>metrics-annotation</artifactId>
             <version>${metrics.version}</version>
         </dependency>
+        <!-- SpringBoot使用MapStruct自动映射DTO -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-jdk8</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- SpringBoot使用MapStruct自动映射DTO -->
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

@@ -15,7 +15,7 @@
  */
 package com.developer.mousika.generator.engine;
 
-import com.developer.mousika.generator.config.builder.ConfigBuilder;
+import com.developer.mousika.config.builder.ConfigBuilder;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;

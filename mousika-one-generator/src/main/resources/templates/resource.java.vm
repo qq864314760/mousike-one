@@ -1,4 +1,4 @@
-package ${package.Controller};
+package ${package.Resource};
 
 import com.sinfusi.democracy.common.resource.BaseResource;
 import com.baomidou.mybatisplus.core.conditions.Condition;
@@ -26,12 +26,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 /**
- * <p>
  * $!{table.comment} 前端控制器
- * </p>
  *
  * @author ${author}
- * @since ${date}
+ * @date  ${date}
  */
 #if(${restControllerStyle})
 @RestController
@@ -39,16 +37,15 @@ import java.util.Optional;
 @Controller
 #end
 @RequestMapping("/api")
-
-#if(${superControllerClass})
-public class ${table.controllerName} extends ${superControllerClass} {
+#if(${superResourceClass})
+public class ${table.resourceName} extends ${superResourceClass} {
 #else
-public class ${table.controllerName} {
+public class ${table.resourceName} {
 #end
-    private final static Logger logger = LoggerFactory.getLogger(${table.controllerName}.class);
+    private final static Logger logger = LoggerFactory.getLogger(${table.resourceName}.class);
     public ${table.serviceName} ${table.entityPath}Service;
 
-    public ${table.controllerName}(${table.serviceName} ${table.entityPath}Service){
+    public ${table.resourceName}(${table.serviceName} ${table.entityPath}Service){
         this.${table.entityPath}Service=${table.entityPath}Service;
     }
 

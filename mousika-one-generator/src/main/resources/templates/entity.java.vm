@@ -1,7 +1,9 @@
 package ${package.Entity};
 
 #foreach($pkg in ${table.importPackages})
+#if($pkg.indexOf("TableName") > -1 || $pkg.indexOf("BaseEntity") > -1)
 import ${pkg};
+#end
 #end
 #if(${entityLombokModel})
 import lombok.Data;
@@ -11,9 +13,7 @@ import lombok.ToString;
 #end
 
 /**
- * <p>
  * $!{table.comment}
- * </p>
  *
  * @author ${author}
  * @since ${date}

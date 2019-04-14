@@ -1,0 +1,141 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * $!{table.comment} 前端控制器
+ *
+ * @author ${author}
+ * @date  ${date}
+ */
+@RestController
+@Slf4j
+@RequestMapping("/webservice/${entity}")
+public class ${entity}sController {
+
+    @Autowired
+    private ${entity}Client ${entity.toLowerCase()}Client;
+
+    /**
+     * 获取$!{table.comment}列表
+     * @param ${entity.toLowerCase()}DTO
+     * @param page
+     * @return
+     * @throws Exception
+     */
+    @Timed
+    @GetMapping("/get${entity}List")
+    public Result get${entity}List(${entity}DTO ${entity.toLowerCase()}DTO,Page page) {
+        log.debug("获取的$!{table.comment}列表:{}", "${entity}实体：" + ${entity.toLowerCase()}DTO + "--分页实体:" + page);
+        ResponseEntity<Page<${entity}DTO>> result = null;
+        Map param = new HashMap();
+        try {
+            param = ConverterUtil.BeanToMap(${entity.toLowerCase()}DTO, param);
+            param = ConverterUtil.PageToMap(page, param);
+            result = ${entity.toLowerCase()}Client.get${entity}List(param);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException(e);
+        }
+        return R.result(result.getBody().getRecords()));
+    }
+
+    /**
+     * 根据Id查询$!{table.comment}数据
+     *
+     * @param id
+     * @return
+     */
+    @Timed
+    @GetMapping("/get${entity}ById")
+    public Result get${entity}ById(@RequestParam String id) {
+        log.debug("根据id查询,$!{table.comment}数据:{}", id);
+        ResponseEntity<${entity}DTO> result = null;
+        try {
+            result = ${entity.toLowerCase()}Client.get${entity}ById(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException(e);
+        }
+        return R.result(result.getBody());
+    }
+
+    /**
+     * 添加$!{table.comment}数据
+     *
+     * @param ${entity.toLowerCase()}DTO
+     * @return
+     */
+    @Timed
+    @PostMapping("/add${entity}")
+    public Result addRegion(@RequestBody ${entity}DTO ${entity.toLowerCase()}DTO) {
+        log.debug("添加$!{table.comment}数据，{}", ${entity.toLowerCase()}DTO);
+        /**
+         * 添加数据
+         */
+        ResponseEntity<${entity}DTO> result = null;
+        try {
+            result = ${entity.toLowerCase()}Client.create${entity}(${entity.toLowerCase()}DTO);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException(e);
+        }
+
+        return R.result(result.getBody());
+    }
+
+    /**
+     * 更新$!{table.comment}数据
+     *
+     * @param ${entity.toLowerCase()}DTO
+     * @return
+     */
+    @Timed
+    @PutMapping("/update${entity}")
+    public Result update${entity}(@RequestBody ${entity}DTO ${entity.toLowerCase()}DTO) {
+        log.debug("更新$!{table.comment}数据，{}", ${entity.toLowerCase()}DTO);
+        /**
+         * 更新数据
+         */
+        ResponseEntity<${entity}DTO> result = null;
+        try {
+            result = regionsClient.update${entity}ById(${entity.toLowerCase()}DTO);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException(e);
+        }
+
+        return R.result(result.getBody());
+    }
+
+    /**
+     * 根据id删除$!{table.comment}数据
+     *
+     * @param id
+     * @return
+     */
+    @Timed
+    @DeleteMapping("/delete${entity}ById")
+    public Result delete${entity}ById(@RequestParam String id) {
+        log.debug("删除$!{table.comment}数据", "Id:" + id);
+        if (StringUtils.isEmpty(id)) {
+            throw new BusinessException("参数ID不能为空");
+        }
+        try {
+            regionsClient.delet${entity}ById(id);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            throw new BusinessException(e);
+        }
+        return R.ok();
+    }
+}

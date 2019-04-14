@@ -1,12 +1,14 @@
 package ${package.Service};
 
+#foreach($pkg in ${table.importPackages})
+#if($pkg.indexOf("BaseService") > -1)
+import ${pkg};
+#end
+#end
 import ${package.Entity}.${entity};
-import com.sinfusi.democracy.common.service.BaseService;
 
 /**
- * <p>
  * $!{table.comment} 服务类
- * </p>
  *
  * @author ${author}
  * @since ${date}

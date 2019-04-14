@@ -1,10 +1,10 @@
 package com.developer.mousika.generator;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.developer.mousika.generator.config.*;
-import com.developer.mousika.generator.config.po.TableFill;
-import com.developer.mousika.generator.config.rules.NamingStrategy;
-import org.apache.commons.lang3.StringUtils;
+import com.developer.mousika.config.*;
+import com.developer.mousika.config.po.TableFill;
+import com.developer.mousika.config.rules.NamingStrategy;
+import com.developer.mousika.utils.ConverterUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,30 +15,14 @@ import java.util.List;
  */
 public class XCodeGenerator {
 
-    public static String PACKAGE_PATH = "com.sinfusi.democracy";
-    public static String BASE_PATH = PACKAGE_PATH + ".service.lambda.common.";
-    public static String PARENT_PATH = PACKAGE_PATH + ".service.lambda";
+    public AutoGenerator generator(String moduleName, String outPackage, String outDir, String tableName) {
 
-    private static String driverName = "com.mysql.cj.jdbc.Driver";
-    private static String dbName = "mousika";
-    private static String username = "root";
-    private static String password = "1234";
-    private static String serviceUrl = "127.0.0.1";
-    private static String servicePort = "3306";
-    private static String url = "jdbc:mysql://" + serviceUrl + ":" + servicePort + "/" + dbName + "?characterEncoding=utf8";
-
-    public static String packageName;
-    private static File file;
-    private static String path;
-    private static String authorName = "developer";
-
-    public AutoGenerator generator(String modelName, String table, String tablePrefix, String resource, String outPutUrl, String outPackage) {
-        if (StringUtils.isNotEmpty(outPackage)) {
-            PARENT_PATH = outPackage;
-        }
-        packageName = outPutUrl;
-        file = new File(packageName);
-        path = file.getAbsolutePath();
+        //应全部为小写字母和数字组成(遵循编程规范)
+        // ConverterUtil.underline2Camel(tableName)
+        String modelName = tableName.replace("-", "").replace("_", "").toLowerCase();
+        String resourceName = ConverterUtil.underline2Camel(tableName);
+        //输出文件目录
+        String outputDir = new File(moduleName + XCodeConfig.DEFAULT_ROOT_DIR_JAVA).getAbsolutePath();
         // 自定义需要填充的字段
         List<TableFill> tableFillList = new ArrayList<>();
         //tableFillList.add(new TableFill("ASDD_SS", FieldFill.INSERT_UPDATE));
@@ -48,7 +32,7 @@ public class XCodeGenerator {
                         // 全局配置
                         new GlobalConfig()
                                 //输出目录
-                                .setOutputDir(path)
+                                .setOutputDir(outputDir)
                                 // 是否覆盖文件
                                 .setFileOverride(true)
                                 .setOpen(false)
@@ -61,9 +45,9 @@ public class XCodeGenerator {
                                 // XML columList
                                 .setBaseColumnList(true)
                                 //.setKotlin(true) 是否生成 kotlin 代码
-                                .setAuthor(authorName)
+                                .setAuthor(XCodeConfig.AUTHOR_NAME)
                                 // 自定义文件命名，注意 %s 会自动填充表实体属性！
-                                //.setEntityName("%sEntity")
+                                .setEntityName("%s")
                                 .setMapperName("%sMapper")
                                 .setXmlName("%sMapper")
                                 .setServiceName("%sService")
@@ -72,60 +56,47 @@ public class XCodeGenerator {
                                 .setDtoName("%sDTO")
                                 .setMapStructName("%sMapStruct")
                                 .setAngluarEntityName("%sEntity")
-                                .setAngluarHttpServiceName("%sHttpServic")
+                                .setAngluarHttpServiceName("%sService")
                 ).setDataSource(
                         // 数据源配置
                         new DataSourceConfig()
                                 // 数据库类型
                                 .setDbType(DbType.MYSQL)
-                                //.setDbType(DbType.POSTGRE_SQL)
-                                /*.setTypeConvert(new MySqlTypeConvert() {
-                                    // 自定义数据库表字段类型转换【可选】
-                                    @Override
-                                    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
-                                        // if ( fieldType.toLowerCase().contains( "tinyint" ) ) {
-                                        //    return DbColumnType.BOOLEAN;
-                                        // }
-                                        return super.processTypeConvert(globalConfig, fieldType);
-                                    }
-                                })*/
-                                .setSchemaName("public")
-                                .setDriverName(driverName)
-                                .setUsername(username)
-                                .setPassword(password)
-                                .setUrl(url)
+                                .setSchemaName(XCodeConfig.SCHEMA_NAME)
+                                .setDriverName(XCodeConfig.DRIVER_NAME)
+                                .setUsername(XCodeConfig.USER_NAME)
+                                .setPassword(XCodeConfig.PASS_WORD)
+                                .setUrl(XCodeConfig.URL)
                 ).setStrategy(
                         // 策略配置
                         new StrategyConfig()
-                                .setSuperDtoClass(BASE_PATH + "dto.BaseDTO")
-                                .setSuperMapStructClass(BASE_PATH + "mapstruct.BaseMapStruct")
                                 // 全局大写命名
                                 // .setCapitalMode(true)
                                 //全局下划线命名
                                 // .setDbColumnUnderline(true)
-                                .setResource(resource)
-                                .setTablePrefix(new String[]{tablePrefix})
+                                .setTablePrefix(new String[]{})
                                 // 表名生成策略
                                 .setNaming(NamingStrategy.underline_to_camel)
                                 // 需要生成的表
-                                .setInclude(new String[]{table})
+                                .setInclude(new String[]{tableName})
                                 // 排除生成的表
                                 // .setExclude(new String[]{"test"})
                                 // 自定义实体父类
-                                .setSuperEntityClass(PACKAGE_PATH + ".common.entity.BaseEntity")
-                                .setSuperDtoClass(BASE_PATH + "dto.BaseDTO")
-                                .setSuperMapStructClass(BASE_PATH + "mapstruct.BaseMapStruct")
+                                .setSuperEntityClass(outPackage + ".base.entity.BaseEntity")
+                                .setSuperDtoClass(outPackage + ".base.dto.BaseDTO")
+                                .setSuperMapStructClass(outPackage + ".base.mapstruct.BaseMapStruct")
+                                // 自定义 service 父类
+                                .setSuperServiceClass(outPackage + ".base.service.BaseService")
+                                // 自定义 service 实现类父类
+                                .setSuperServiceImplClass(outPackage + ".base.service.impl.BaseServiceImpl")
+                                // 自定义 controller 父类
+                                .setSuperResourceClass(outPackage + ".base.resource.BaseResource")
+                                .setResourceName(resourceName)
                                 // 自定义实体，公共字段
                                 //.setSuperEntityColumns(new String[]{"test_id"})
                                 .setTableFillList(tableFillList)
                                 // 自定义 mapper 父类
                                 // .setSuperMapperClass("com.baomidou.demo.TestMapper")
-                                // 自定义 service 父类
-                                .setSuperServiceClass(PACKAGE_PATH + ".service.BaseService")
-                                // 自定义 service 实现类父类
-                                .setSuperServiceImplClass(PACKAGE_PATH + ".service.impl.BaseServiceImpl")
-                                // 自定义 controller 父类
-                                .setSuperControllerClass(PACKAGE_PATH + ".resource.BaseResource")
                                 // 【实体】是否生成字段常量（默认 false）
                                 // public static final String ID = "test_id";
                                 // .setEntityColumnConstant(true)
@@ -142,28 +113,31 @@ public class XCodeGenerator {
                         // 包配置
                         new PackageConfig()
                                 // 包路径
-                                .setParent(PARENT_PATH + "." + modelName)
-                                .setDto("dto")
-                                .setMapStruct("mapstruct")
-                                .setController("web.rest")
+                                .setParent(outPackage + "." + outDir + "." + modelName)
                                 .setEntity("domain")
+                                .setDto("dto")
                                 .setMapper("mapper")
+                                .setMapStruct("mapstruct")
                                 .setService("service")
                                 .setServiceImpl("service.impl")
+                                .setResource("web.rest")
+                                .setController("web.webservice")
                                 .setXml("mapper." + modelName)
+                                .setAngluarEntity("angluar.entity")
+                                .setAngluarHttpService("angluar.http")
                 ).setTemplate(
                         new TemplateConfig()
-                                .setDto("/templates/dto.java.vm")
-                                .setMapStruct("/templates/mapStruct.java.vm")
-                                .setResource("/templates/resource.java.vm")
-                                .setAngluarEntity("/templates/entity.ts.vm")
-                                .setAngluarHttpService("/templates/httpService.ts.vm")
-                                .setController("/templates/resource.java.vm")
                                 .setEntity("/templates/entity.java.vm")
+                                .setDto("/templates/dto.java.vm")
                                 .setMapper("/templates/mapper.java.vm")
-                                .setXml("/templates/mapper.xml.vm")
+                                .setMapStruct("/templates/mapStruct.java.vm")
                                 .setService("/templates/service.java.vm")
-                                .setServiceImpl("/templates/serviceImpl.java.vm"));
+                                .setServiceImpl("/templates/serviceImpl.java.vm")
+                                .setResource("/templates/resource.java.vm")
+                                .setController("/templates/controller.java.vm")
+                                .setXml("/templates/mapper.xml.vm")
+                                .setAngluarEntity("/templates/entity.ts.vm")
+                                .setAngluarHttpService("/templates/httpService.ts.vm"));
         return mpg;
     }
 }
